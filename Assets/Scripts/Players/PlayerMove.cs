@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +5,7 @@ using UnityEngine.UI;
 public class PlayerMove : MonoBehaviour
 {
     private Rigidbody2D _rigidbody;
-    [HideInInspector] public bool  CanMove = true;
+    [HideInInspector] public bool CanMove = true;
     [HideInInspector] public bool IsMoving;
     [HideInInspector] public bool IsSelect;
     [HideInInspector] public Vector2 DirectionOfMovement;
@@ -17,27 +16,42 @@ public class PlayerMove : MonoBehaviour
     public GameObject AbilityPanel;
     public List<Toggle> AbilitiesOnTargetToggles;
 
+    [Header("Move By Mouse Click")]
+    [SerializeField] private float _distanceToTargetPosition = 0.1f;
 
+    private Vector3 _targetPosition;
 
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.isKinematic = true;
-
+        
+        _targetPosition = transform.position; //Чтобы персонаж, не двигался на старте игры.
+        
         Deselect();
     }
+
     void Update()
     {
         if (SelectObject.GetComponent<SelectObject>().SelectedObject == gameObject && IsSelect == false)
         {
             Select();
         }
-        else if(SelectObject.GetComponent<SelectObject>().SelectedObject != gameObject && IsSelect == true)
+        else if (SelectObject.GetComponent<SelectObject>().SelectedObject != gameObject && IsSelect == true)
         {
             Deselect();
         }
 
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+        if (Input.GetMouseButtonDown(1) && IsSelect && CanMove)
+        {
+            _targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            _targetPosition.z = 0;
+
+            Debug.Log("Clicked at: " + _targetPosition); //Место клика.
+        }
+
+        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) ||
+            Input.GetKeyUp(KeyCode.D))
         {
             _rigidbody.velocity = Vector2.zero;
             _rigidbody.isKinematic = true;
@@ -55,13 +69,25 @@ public class PlayerMove : MonoBehaviour
     {
         if (IsSelect && CanMove)
         {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+            if (Vector2.Distance(transform.position, _targetPosition) > _distanceToTargetPosition)
             {
-                _rigidbody.isKinematic = false;
-                _rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * 100 * MoveSpeed * Time.deltaTime;
+                MoveToPosition(_targetPosition);
+            }
+            else
+            {
+                _rigidbody.velocity = Vector2.zero;
+                _rigidbody.isKinematic = true;
             }
         }
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        {
+            _rigidbody.isKinematic = false;
+            _rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * 100 *
+                                  MoveSpeed * Time.deltaTime;
+        }
     }
+
 
     private void Select()
     {
@@ -78,7 +104,12 @@ public class PlayerMove : MonoBehaviour
         AbilityPanel.SetActive(false);
         MarkersSelect.SetActive(false);
     }
+
+    //Метод перемещения к позиции щелчка мышки.
+    private void MoveToPosition(Vector3 targetPosition)
+    {
+        _rigidbody.isKinematic = false;
+        Vector2 direction = (targetPosition - transform.position).normalized;
+        _rigidbody.velocity = direction * MoveSpeed * Time.deltaTime * 100;
+    }
 }
-  
-
-
