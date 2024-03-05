@@ -50,13 +50,6 @@ public class PlayerMove : MonoBehaviour
             Debug.Log("Clicked at: " + _targetPosition); //Место клика.
         }
 
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) ||
-            Input.GetKeyUp(KeyCode.D))
-        {
-            _rigidbody.velocity = Vector2.zero;
-            _rigidbody.isKinematic = true;
-        }
-
         IsMoving = _rigidbody.velocity != Vector2.zero;
 
         if (IsMoving)
@@ -79,15 +72,21 @@ public class PlayerMove : MonoBehaviour
                 _rigidbody.isKinematic = true;
             }
         }
-
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-        {
-            _rigidbody.isKinematic = false;
-            _rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * 100 *
-                                  MoveSpeed * Time.deltaTime;
-        }
     }
 
+    // Новые методы для управления станом
+    public void Stun(float duration)
+    {
+        CanMove = false;
+        // Дополнительные действия при применении стана, если необходимо
+    }
+
+    public void EndStun()
+    {
+        CanMove = true;
+        // Дополнительные действия при окончании стана, если необходимо
+    }
+    
 
     private void Select()
     {

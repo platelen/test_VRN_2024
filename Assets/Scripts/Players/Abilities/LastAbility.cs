@@ -12,7 +12,7 @@ public class LastAbility : MonoBehaviour
     [HideInInspector] public bool TwoClick;
     private Vector2 _clickPosition;
 
-   public void AddLastAbility(AbilityBase ability)
+    public void AddLastAbility(AbilityBase ability)
     {
         LastUseAbility = ability;
         OneClick = false;
@@ -21,10 +21,12 @@ public class LastAbility : MonoBehaviour
 
     private void Update()
     {
-        if(LastUseAbility != null && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (LastUseAbility != null && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            if (Select.SelectedObject.transform.Find("Abilities").GetComponent<FourMeleeAttack>() && Select.SelectedObject.transform.Find("Abilities").GetComponent<FourMeleeAttack>().ToggleAbility.isOn &&
-                Select.SelectedObject.transform.Find("Abilities").GetComponent<FourMeleeAttack>().TargetParent == null && OneClick == false)
+            if (Select.SelectedObject.transform.Find("Abilities").GetComponent<FourMeleeAttack>() && Select
+                    .SelectedObject.transform.Find("Abilities").GetComponent<FourMeleeAttack>().ToggleAbility.isOn &&
+                Select.SelectedObject.transform.Find("Abilities").GetComponent<FourMeleeAttack>().TargetParent ==
+                null && OneClick == false)
             {
                 return;
             }
@@ -33,7 +35,8 @@ public class LastAbility : MonoBehaviour
                 ClickAtLastAbility();
             }
         }
-        if(TwoClick)
+
+        if (TwoClick)
         {
             float distance = LastUseAbility.Distance - (1.9f / 2f);
             colliders = Physics2D.OverlapCircleAll(Select.SelectedObject.transform.position, distance);
@@ -74,7 +77,7 @@ public class LastAbility : MonoBehaviour
         }
         else if (hit.collider == null && LastUseAbility.ToggleAbility.isOn == true && OneClick)
         {
-            float distance = LastUseAbility.Distance - (1.9f / 2f); 
+            float distance = LastUseAbility.Distance - (1.9f / 2f);
             colliders = Physics2D.OverlapCircleAll(Select.SelectedObject.transform.position, distance);
 
             if (colliders != null)
@@ -107,4 +110,3 @@ public class LastAbility : MonoBehaviour
         }
     }
 }
-
