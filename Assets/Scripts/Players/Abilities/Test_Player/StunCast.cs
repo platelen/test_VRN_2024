@@ -6,19 +6,15 @@ namespace Players.Abilities.Test_Player
 {
     public class StunCast : AbilityBase
     {
-        [Header("Ability properties")] [SerializeField]
-        private GameObject ManaCost;
+        [Header("Ability properties")]
+        [SerializeField] private GameObject ManaCost;
 
-        [Header("Stun properties")] [SerializeField]
-        private SoStunAbilityData _soStunAbilityData;
+        [Header("Stun properties")] 
+        [SerializeField] private SoStunAbilityData _soStunAbilityData;
 
         protected override KeyCode ActivationKey => KeyCode.Alpha1;
         private bool _isAbilityActivated;
         private bool _isKeyActivated;
-
-        public delegate void FirstAbilityHandler(float value);
-
-        public event FirstAbilityHandler FirstAbilityEvent;
 
 
         private void Update()
@@ -89,9 +85,13 @@ namespace Players.Abilities.Test_Player
             }
         }
 
+        //Метод стана.
         private IEnumerator ApplyStunToEnemy(GameObject enemy)
         {
             PlayerMove enemyMoveComponent = enemy.GetComponent<PlayerMove>();
+
+            if (gameObject.transform.parent != null)
+                gameObject.transform.parent.GetComponent<ManaPlayer>().UseMana(_soStunAbilityData.ManaPrice);
 
             if (enemyMoveComponent != null)
             {

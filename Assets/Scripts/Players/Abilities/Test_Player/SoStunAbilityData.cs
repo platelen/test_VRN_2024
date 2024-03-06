@@ -7,9 +7,12 @@ namespace Players.Abilities.Test_Player
     {
         [SerializeField] private float _stunDuration = 2.0f;
         [SerializeField] private float _radiusCast = 5f;
+        [SerializeField] private float _manaPrice = 20f;
 
         public float StunDuration => _stunDuration;
 
         public float RadiusCast => _radiusCast;
+
+        public float ManaPrice => _manaPrice;
     }
 }
