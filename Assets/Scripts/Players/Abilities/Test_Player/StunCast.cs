@@ -6,15 +6,16 @@ namespace Players.Abilities.Test_Player
 {
     public class StunCast : AbilityBase
     {
-        [Header("Ability properties")]
-        [SerializeField] private GameObject ManaCost;
+        [Header("Ability properties")] [SerializeField]
+        private GameObject ManaCost;
 
-        [Header("Stun properties")] 
-        [SerializeField] private SoStunAbilityData _soStunAbilityData;
+        [Header("Stun properties")] [SerializeField]
+        private SoStunAbilityData _soStunAbilityData;
 
         protected override KeyCode ActivationKey => KeyCode.Alpha1;
         private bool _isAbilityActivated;
         private bool _isKeyActivated;
+        private bool _isPreparingStun;
 
 
         private void Update()
@@ -85,17 +86,37 @@ namespace Players.Abilities.Test_Player
             }
         }
 
+        private IEnumerator PreparingStunCast()
+        {
+            _isPreparingStun = true;
+            Debug.Log("Подготовка к касту стана");
+            yield return new WaitForSeconds(_soStunAbilityData.PreparingStun);
+            _isPreparingStun = false;
+        }
+
         //Метод стана.
         private IEnumerator ApplyStunToEnemy(GameObject enemy)
         {
             PlayerMove enemyMoveComponent = enemy.GetComponent<PlayerMove>();
 
             if (gameObject.transform.parent != null)
+            {
                 gameObject.transform.parent.GetComponent<ManaPlayer>().UseMana(_soStunAbilityData.ManaPrice);
+                StartCoroutine(PreparingStunCast());
+                
+                // Дожидаемся окончания подготовки стана
+                while (_isPreparingStun)
+                {
+                    yield return null;
+                }
+            }
+
 
             if (enemyMoveComponent != null)
             {
                 enemyMoveComponent.Stun(_soStunAbilityData.StunDuration);
+                enemyMoveComponent.GetComponent<HealthPlayer>().TakeMagicDamage(_soStunAbilityData.DamageStun);
+                _isPreparingStun = true;
             }
 
             yield return new WaitForSeconds(_soStunAbilityData.StunDuration);

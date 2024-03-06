@@ -16,8 +16,8 @@ public class PlayerMove : MonoBehaviour
     public GameObject AbilityPanel;
     public List<Toggle> AbilitiesOnTargetToggles;
 
-    [Header("Move By Mouse Click")]
-    [SerializeField] private float _distanceToTargetPosition = 0.1f;
+    [Header("Move By Mouse Click")] [SerializeField]
+    private float _distanceToTargetPosition = 0.1f;
 
     private Vector3 _targetPosition;
 
@@ -25,9 +25,8 @@ public class PlayerMove : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.isKinematic = true;
-        
+
         _targetPosition = transform.position; //Чтобы персонаж, не двигался на старте игры.
-        
         Deselect();
     }
 
@@ -78,6 +77,7 @@ public class PlayerMove : MonoBehaviour
     public void Stun(float duration)
     {
         CanMove = false;
+        _rigidbody.velocity = Vector2.zero;
         Debug.Log($"Персонаж {gameObject.name} в стане");
     }
 
@@ -86,7 +86,7 @@ public class PlayerMove : MonoBehaviour
         CanMove = true;
         Debug.Log($"Персонаж {gameObject.name} вышел из стана");
     }
-    
+
 
     private void Select()
     {
