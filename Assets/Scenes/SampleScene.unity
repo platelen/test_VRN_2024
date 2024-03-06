@@ -7782,10 +7782,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1138358088594896431}
     - target: {fileID: 5780032352133366265, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
-      propertyPath: ManaCost
-      value: 
-      objectReference: {fileID: 4698802035277633662}
-    - target: {fileID: 5780032352133366265, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
       propertyPath: Abilities
       value: 
       objectReference: {fileID: 6194437770014588461}
@@ -7794,17 +7790,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7191008680935923226}
     - target: {fileID: 5780032352133366265, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
-      propertyPath: CircleSelect
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5780032352133366265, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
       propertyPath: ToggleAbility
       value: 
       objectReference: {fileID: 823206515584946923}
-    - target: {fileID: 5780032352133366265, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
-      propertyPath: IconAbilityAutoattack
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6549186369507730428, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
       propertyPath: Select
       value: 
@@ -11134,11 +11122,6 @@ PolygonCollider2D:
       - {x: 1.01, y: -1.425}
       - {x: 1.0699999, y: -1.405}
   m_UseDelaunayMesh: 0
---- !u!1 &4698802035277633662 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7889535152258393177, guid: 60e0dcf3cc4f3f749bd9af9074a22882, type: 3}
-  m_PrefabInstance: {fileID: 767689051874972826}
-  m_PrefabAsset: {fileID: 0}
 --- !u!212 &4774686967600937726
 SpriteRenderer:
   m_ObjectHideFlags: 0

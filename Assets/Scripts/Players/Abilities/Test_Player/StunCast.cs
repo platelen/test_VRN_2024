@@ -29,7 +29,12 @@ namespace Players.Abilities.Test_Player
 
             if (_isKeyActivated)
             {
+                DrawCircle.Draw(_radiusCast);
                 CheckPosMouse();
+            }
+            else
+            {
+                DrawCircle.Clear();
             }
         }
 
@@ -55,7 +60,7 @@ namespace Players.Abilities.Test_Player
 
             if (distanceToMouse <= _radiusCast)
             {
-                Debug.Log("Указатель мыши находится в заданном радиусе");
+                HandleTargetSelection();
             }
             else
             {
@@ -63,10 +68,35 @@ namespace Players.Abilities.Test_Player
             }
         }
 
-        private void OnDrawGizmos()
+        private void HandleTargetSelection()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, _radiusCast);
+            // Выбор врага
+            _targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(_targetPosition, Vector2.zero);
+
+            if (hit.collider != null && hit.collider.CompareTag("Enemies"))
+            {
+                // TargetParent = hit.collider.gameObject;
+                //
+                // if (NewAbilityPrefab != null)
+                // {
+                //     Destroy(NewAbilityPrefab);
+                // }
+                DrawCircle.Clear();
+                ToggleActivation();
+                Debug.Log($"Тэг обжекта: {hit.collider.gameObject.tag} Имя обжекта: {hit.collider.gameObject.name}");
+            }
+            else if (hit.collider != null && hit.collider.CompareTag("Allies"))
+            {
+                // TargetParent = gameObject;
+                //
+                // if (NewAbilityPrefab != null)
+                // {
+                //     Destroy(NewAbilityPrefab);
+                // }
+
+                Debug.Log($"Тэг обжекта: {hit.collider.gameObject.tag} Имя обжекта: {hit.collider.gameObject.name}");
+            }
         }
 
 

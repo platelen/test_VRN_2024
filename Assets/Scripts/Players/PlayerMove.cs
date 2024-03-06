@@ -47,7 +47,7 @@ public class PlayerMove : MonoBehaviour
             _targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _targetPosition.z = 0;
 
-            Debug.Log("Clicked at: " + _targetPosition); //Место клика.
+            //Debug.Log("Clicked at: " + _targetPosition); //Место клика.
         }
 
         IsMoving = _rigidbody.velocity != Vector2.zero;
