@@ -16,8 +16,8 @@ public class PlayerMove : MonoBehaviour
     public GameObject AbilityPanel;
     public List<Toggle> AbilitiesOnTargetToggles;
 
-    [Header("Move By Mouse Click")]
-    [SerializeField] private float _distanceToTargetPosition = 0.1f;
+    [Header("Move By Mouse Click")] [SerializeField]
+    private float _distanceToTargetPosition = 0.1f;
 
     private Vector3 _targetPosition;
 
@@ -25,9 +25,8 @@ public class PlayerMove : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.isKinematic = true;
-        
+
         _targetPosition = transform.position; //Чтобы персонаж, не двигался на старте игры.
-        
         Deselect();
     }
 
@@ -47,14 +46,7 @@ public class PlayerMove : MonoBehaviour
             _targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             _targetPosition.z = 0;
 
-            Debug.Log("Clicked at: " + _targetPosition); //Место клика.
-        }
-
-        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.A) ||
-            Input.GetKeyUp(KeyCode.D))
-        {
-            _rigidbody.velocity = Vector2.zero;
-            _rigidbody.isKinematic = true;
+            //Debug.Log("Clicked at: " + _targetPosition); //Место клика.
         }
 
         IsMoving = _rigidbody.velocity != Vector2.zero;
@@ -79,13 +71,20 @@ public class PlayerMove : MonoBehaviour
                 _rigidbody.isKinematic = true;
             }
         }
+    }
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-        {
-            _rigidbody.isKinematic = false;
-            _rigidbody.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * 100 *
-                                  MoveSpeed * Time.deltaTime;
-        }
+    // Новые методы для управления станом
+    public void Stun(float duration)
+    {
+        CanMove = false;
+        _rigidbody.velocity = Vector2.zero;
+        Debug.Log($"Персонаж {gameObject.name} в стане");
+    }
+
+    public void EndStun()
+    {
+        CanMove = true;
+        Debug.Log($"Персонаж {gameObject.name} вышел из стана");
     }
 
 

@@ -10,40 +10,50 @@ public class SelectObject : MonoBehaviour
     public GameObject FirstPlayer;
     public GameObject SecondPlayer;
     public GameObject ThirstPlayer;
+    public GameObject TestPlayer;
 
     private void Start()
     {
-        if(SelectedObject != null)
+        if (SelectedObject != null)
         {
             SelectedObject.layer = LayerMask.NameToLayer("Player");
         }
     }
+
     private void Update()
     {
         if (CanSelect)
         {
-            if(Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(KeyCode.F1))
             {
                 SelectedObject.layer = LayerMask.NameToLayer("OtherPlayers");
 
                 SelectedObject = FirstPlayer;
                 SelectedObject.layer = LayerMask.NameToLayer("Player");
             }
+
             if (Input.GetKeyDown(KeyCode.F2))
             {
                 SelectedObject.layer = LayerMask.NameToLayer("OtherPlayers");
 
                 SelectedObject = SecondPlayer;
                 SelectedObject.layer = LayerMask.NameToLayer("Player");
-
             }
+
             if (Input.GetKeyDown(KeyCode.F3))
             {
                 SelectedObject.layer = LayerMask.NameToLayer("OtherPlayers");
 
                 SelectedObject = ThirstPlayer;
                 SelectedObject.layer = LayerMask.NameToLayer("Player");
+            }
 
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                SelectedObject.layer = LayerMask.NameToLayer("OtherPlayers");
+
+                SelectedObject = TestPlayer;
+                SelectedObject.layer = LayerMask.NameToLayer("Player");
             }
         }
     }
