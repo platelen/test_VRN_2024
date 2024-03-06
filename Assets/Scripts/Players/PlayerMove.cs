@@ -78,13 +78,13 @@ public class PlayerMove : MonoBehaviour
     public void Stun(float duration)
     {
         CanMove = false;
-        // Дополнительные действия при применении стана, если необходимо
+        Debug.Log($"Персонаж {gameObject.name} в стане");
     }
 
     public void EndStun()
     {
         CanMove = true;
-        // Дополнительные действия при окончании стана, если необходимо
+        Debug.Log($"Персонаж {gameObject.name} вышел из стана");
     }
     
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Players.Abilities.Test_Player
@@ -9,10 +10,7 @@ namespace Players.Abilities.Test_Player
         private GameObject ManaCost;
 
         [Header("Stun properties")] [SerializeField]
-        private float stunDuration = 2.0f;
-
-        [SerializeField] private float _radiusCast = 5f;
-
+        private SoStunAbilityData _soStunAbilityData;
 
         protected override KeyCode ActivationKey => KeyCode.Alpha1;
         private bool _isAbilityActivated;
@@ -29,7 +27,7 @@ namespace Players.Abilities.Test_Player
 
             if (_isKeyActivated)
             {
-                DrawCircle.Draw(_radiusCast);
+                DrawCircle.Draw(_soStunAbilityData.RadiusCast);
                 CheckPosMouse();
             }
             else
@@ -58,7 +56,7 @@ namespace Players.Abilities.Test_Player
                 Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float distanceToMouse = Vector2.Distance(transform.position, mousePosition);
 
-            if (distanceToMouse <= _radiusCast)
+            if (distanceToMouse <= _soStunAbilityData.RadiusCast)
             {
                 HandleTargetSelection();
             }
@@ -74,31 +72,40 @@ namespace Players.Abilities.Test_Player
             _targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(_targetPosition, Vector2.zero);
 
-            if (hit.collider != null && hit.collider.CompareTag("Enemies"))
+            int playerLayer = LayerMask.NameToLayer("Player");
+
+            if (hit.collider != null && hit.collider.CompareTag("Enemies") &&
+                hit.collider.gameObject.layer != playerLayer)
             {
-                // TargetParent = hit.collider.gameObject;
-                //
-                // if (NewAbilityPrefab != null)
-                // {
-                //     Destroy(NewAbilityPrefab);
-                // }
+                StartCoroutine(ApplyStunToEnemy(hit.collider.gameObject));
                 DrawCircle.Clear();
                 ToggleActivation();
+
                 Debug.Log($"Тэг обжекта: {hit.collider.gameObject.tag} Имя обжекта: {hit.collider.gameObject.name}");
             }
             else if (hit.collider != null && hit.collider.CompareTag("Allies"))
             {
-                // TargetParent = gameObject;
-                //
-                // if (NewAbilityPrefab != null)
-                // {
-                //     Destroy(NewAbilityPrefab);
-                // }
-
                 Debug.Log($"Тэг обжекта: {hit.collider.gameObject.tag} Имя обжекта: {hit.collider.gameObject.name}");
             }
         }
 
+        private IEnumerator ApplyStunToEnemy(GameObject enemy)
+        {
+            PlayerMove enemyMoveComponent = enemy.GetComponent<PlayerMove>();
+
+            if (enemyMoveComponent != null)
+            {
+                enemyMoveComponent.Stun(_soStunAbilityData.StunDuration);
+            }
+
+            yield return new WaitForSeconds(_soStunAbilityData.StunDuration);
+
+            if (enemyMoveComponent != null)
+            {
+                enemyMoveComponent.EndStun();
+                StopAllCoroutines();
+            }
+        }
 
         public override void ChangeBoolAndValues()
         {
